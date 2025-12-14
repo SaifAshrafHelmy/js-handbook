@@ -33,17 +33,17 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
     return (
         <div className="container py-12 lg:py-16 max-w-screen-xl px-4 md:px-8">
-            <div className="mb-10 lg:mb-14 text-center max-w-4xl mx-auto">
+            <div className="mb-8 md:mb-10 lg:mb-14 text-center max-w-4xl mx-auto">
                 <Link
                     href="/"
-                    className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
+                    className="inline-flex items-center text-xs sm:text-sm text-muted-foreground hover:text-primary mb-4 md:mb-6 transition-colors"
                 >
-                    <ChevronLeft className="mr-1 h-4 w-4" /> Back to Overview
+                    <ChevronLeft className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Back to Overview
                 </Link>
-                <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight lg:text-6xl mb-4 md:mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent px-4">
                     {topic.title}
                 </h1>
-                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">{topic.description}</p>
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed px-4">{topic.description}</p>
             </div>
 
             <div className="max-w-4xl mx-auto">

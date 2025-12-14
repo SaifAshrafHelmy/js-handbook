@@ -18,9 +18,9 @@ export function TopicWheel({ topics }: TopicWheelProps) {
     const activeTopic = filteredTopics.find((t) => t.id === activeId);
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8 items-start justify-center min-h-[600px] w-full">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start justify-center min-h-[400px] md:min-h-[600px] w-full">
             {/* Topic List */}
-            <div className="w-full lg:w-1/2 space-y-2">
+            <div className="w-full lg:w-1/2 space-y-1.5 md:space-y-2">
                 {filteredTopics.map((topic, index) => (
                     <motion.div
                         key={topic.id}
@@ -45,11 +45,12 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                         <Link
                             href={`/topics/${topic.slug}`}
                             onMouseEnter={() => setActiveId(topic.id)}
-                            className="flex items-center p-4 w-fit"
+                            onClick={() => setActiveId(topic.id)}
+                            className="flex items-center p-3 md:p-4 w-full md:w-fit"
                         >
                             <div
                                 className={cn(
-                                    "flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold mr-4 transition-colors",
+                                    "flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full text-xs md:text-sm font-bold mr-3 md:mr-4 transition-colors flex-shrink-0",
                                     activeId === topic.id
                                         ? "bg-primary text-primary-foreground"
                                         : "bg-muted text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary"
@@ -59,8 +60,8 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                             </div>
                             <span
                                 className={cn(
-                                    "text-lg font-medium transition-colors",
-                                    activeId === topic.id ? "text-primary font-bold text-xl" : "text-foreground/80"
+                                    "text-base md:text-lg font-medium transition-colors",
+                                    activeId === topic.id ? "text-primary font-bold text-lg md:text-xl" : "text-foreground/80"
                                 )}
                             >
                                 {topic.title}
@@ -78,7 +79,7 @@ export function TopicWheel({ topics }: TopicWheelProps) {
             </div>
 
             {/* Preview Card */}
-            <div className="w-full lg:w-1/2 sticky top-24">
+            <div className="w-full lg:w-1/2 lg:sticky lg:top-24">
                 <AnimatePresence mode="wait">
                     {activeTopic && (
                         <motion.div
@@ -87,7 +88,7 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -20, scale: 0.95 }}
                             transition={{ duration: 0.3 }}
-                            className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card to-muted/20 p-8 shadow-2xl h-full group hover:border-primary/50 transition-colors"
+                            className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-border/50 bg-gradient-to-br from-card to-muted/20 p-5 md:p-8 shadow-2xl h-full group hover:border-primary/50 transition-colors"
                         >
                             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
                                 <Code className="w-48 h-48" />
@@ -99,8 +100,8 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                                     {activeTopic.category}
                                 </div>
 
-                                <h2 className="text-3xl font-bold mb-4 group-hover:text-primary transition-colors">{activeTopic.title}</h2>
-                                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                                <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 group-hover:text-primary transition-colors">{activeTopic.title}</h2>
+                                <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 leading-relaxed">
                                     {activeTopic.description}
                                 </p>
 

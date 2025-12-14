@@ -97,27 +97,27 @@ export default function HOFDetailPage() {
                 )}
             </AnimatePresence>
 
-            <div className="mb-8">
+            <div className="mb-6 md:mb-8">
                 <Link
                     href="/hof"
-                    className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
+                    className="inline-flex items-center text-xs sm:text-sm text-muted-foreground hover:text-primary mb-4 md:mb-6 transition-colors"
                 >
-                    <ArrowLeft className="mr-1 h-4 w-4" /> Back to Methods
+                    <ArrowLeft className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Back to Methods
                 </Link>
-                <div className="flex items-center gap-4 mb-4">
-                    <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl text-primary bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 md:mb-4">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight lg:text-6xl text-primary bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
                         .{hof.name}()
                     </h1>
-                    <Badge variant="outline" className="text-lg py-1 px-3 border-primary/20 bg-primary/5 text-primary">
+                    <Badge variant="outline" className="text-sm md:text-base lg:text-lg py-0.5 md:py-1 px-2 md:px-3 border-primary/20 bg-primary/5 text-primary w-fit">
                         Array Method
                     </Badge>
                 </div>
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl leading-relaxed">
                     {hof.description}
                 </p>
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
+            <div className="grid gap-6 md:gap-8 lg:grid-cols-[1fr_400px]">
                 <div className="space-y-8">
                     {/* Main Content */}
                     <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
@@ -154,7 +154,7 @@ export default function HOFDetailPage() {
 
                 {/* Practice Section */}
                 <div className="space-y-6">
-                    <div className="sticky top-24">
+                    <div className="lg:sticky lg:top-24">
                         <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent overflow-hidden">
                             <CardHeader className="bg-primary/10 border-b border-primary/10">
                                 <CardTitle className="flex items-center gap-2 text-primary">

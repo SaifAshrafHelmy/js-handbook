@@ -15,21 +15,21 @@ export default function HOFPage() {
 
     return (
         <div className="container py-12 lg:py-16 max-w-screen-2xl px-4 md:px-8">
-            <div className="mb-12 text-center max-w-3xl mx-auto">
-                <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <div className="mb-8 md:mb-12 text-center max-w-3xl mx-auto">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight lg:text-6xl mb-4 md:mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                     JavaScript Array Methods
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed mb-6 md:mb-8 px-4">
                     Master these methods to write cleaner, more functional, and efficient JavaScript code.
                 </p>
 
-                <div className="flex justify-center">
-                    <div className="flex items-center space-x-2 bg-secondary/50 p-2 rounded-full border border-border/50">
+                <div className="flex justify-center px-4">
+                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:space-x-2 bg-secondary/50 p-2 rounded-2xl sm:rounded-full border border-border/50 w-full sm:w-auto max-w-sm sm:max-w-none">
                         <Button
                             variant={!showHOFOnly ? "secondary" : "ghost"}
                             size="sm"
                             onClick={() => setShowHOFOnly(false)}
-                            className="rounded-full px-6"
+                            className="rounded-full px-4 sm:px-6 w-full sm:w-auto text-sm"
                         >
                             All Methods
                         </Button>
@@ -37,15 +37,15 @@ export default function HOFPage() {
                             variant={showHOFOnly ? "secondary" : "ghost"}
                             size="sm"
                             onClick={() => setShowHOFOnly(true)}
-                            className="rounded-full px-6"
+                            className="rounded-full px-4 sm:px-6 w-full sm:w-auto text-sm"
                         >
-                            Higher Order Functions only
+                            HOF Only
                         </Button>
                     </div>
                 </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-4 md:gap-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                 {filteredHofs.map((hof) => (
                     <Card key={hof.id} className="flex flex-col overflow-hidden border-border/50 hover:border-primary/30 transition-colors bg-card/50 backdrop-blur-sm">
                         <CardHeader className="pb-4">
