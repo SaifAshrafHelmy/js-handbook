@@ -72,7 +72,19 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Force CMDK highlighting */
+[cmdk-item][data-selected="true"] {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  border-left: 2px solid hsl(var(--primary));
+}
+
+[cmdk-item][data-selected="true"] svg {
+  color: hsl(var(--primary));
 }

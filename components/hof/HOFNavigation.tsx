@@ -63,7 +63,7 @@ export function HOFNavigation({ currentId, hofs }: HOFNavigationProps) {
                         <SheetHeader className="mb-6">
                             <SheetTitle className="flex items-center gap-2 justify-center">
                                 <Code2 className="h-5 w-5 text-primary" />
-                                Higher Order Functions
+                                Array Methods
                             </SheetTitle>
                         </SheetHeader>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 overflow-y-auto max-h-[calc(80vh-100px)] p-1">

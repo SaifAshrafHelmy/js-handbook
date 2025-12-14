@@ -26,9 +26,10 @@ export default async function TopicPage({ params }: TopicPageProps) {
         notFound();
     }
 
-    const currentIndex = topics.findIndex((t) => t.id === topic.id);
-    const prevTopic = topics[currentIndex - 1];
-    const nextTopic = topics[currentIndex + 1];
+    const navTopics = topics.filter(t => t.slug !== 'interview-prep');
+    const currentIndex = navTopics.findIndex((t) => t.id === topic.id);
+    const prevTopic = navTopics[currentIndex - 1];
+    const nextTopic = navTopics[currentIndex + 1];
 
     return (
         <div className="container py-12 lg:py-16 max-w-screen-xl px-4 md:px-8">
@@ -54,7 +55,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                 </div>
             </div>
 
-            <TopicNavigation currentSlug={slug} topics={topics} />
+            <TopicNavigation currentSlug={slug} topics={navTopics} />
         </div>
     );
 }

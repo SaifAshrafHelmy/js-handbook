@@ -7,6 +7,7 @@ export const hofs: HOF[] = [
     description: "Creates a new array by applying a function to every element.",
     example: "[1, 2, 3].map(x => x * 2); // [2, 4, 6]",
     usage: "Rendering lists in React.",
+    isHOF: true,
     richExample: `
 // React Component: Rendering a list of products
 const ProductList = ({ products }) => {
@@ -37,6 +38,7 @@ console.log(fahrenheit); // [32, 50, 68, 86]
     description: "Creates a new array with all elements that pass the test.",
     example: "[1, 2, 3, 4].filter(x => x % 2 === 0); // [2, 4]",
     usage: "Deleting an item from a list in State.",
+    isHOF: true,
     richExample: `
 // React Hook: Filtering active todos
 const useActiveTodos = (todos) => {
@@ -65,6 +67,7 @@ console.log(longWords); // ['banana', 'strawberry']
     description: "Executes a reducer function on each element, resulting in a single output value.",
     example: "[1, 2, 3].reduce((acc, curr) => acc + curr, 0); // 6",
     usage: "Calculating totals in a shopping cart.",
+    isHOF: true,
     richExample: `
 // Calculating Cart Total
 const cart = [
@@ -93,6 +96,7 @@ console.log(average); // 25
     description: "Executes a provided function once for each array element.",
     example: "[1, 2, 3].forEach(x => console.log(x));",
     usage: "Logging or side effects (avoid for data transformation).",
+    isHOF: true,
     richExample: `
 // Analytics Tracking
 const trackImpressions = (items) => {
@@ -115,6 +119,7 @@ names.forEach(name => console.log(\`Hello, \${name}!\`));
     description: "Returns the value of the first element that satisfies the testing function.",
     example: "[1, 2, 3].find(x => x > 1); // 2",
     usage: "Finding a specific user by ID.",
+    isHOF: true,
     richExample: `
 // Finding a user in a list
 const users = [
@@ -140,6 +145,7 @@ console.log(found); // 12
     description: "Returns the index of the first element that satisfies the testing function.",
     example: "[1, 2, 3].findIndex(x => x > 1); // 1",
     usage: "Finding index to splice/remove an item.",
+    isHOF: true,
     richExample: `
 // Updating an item in a list (Mutable approach)
 const updateItem = (id, newData) => {
@@ -164,6 +170,7 @@ console.log(index); // 2
     description: "Tests whether at least one element in the array passes the test.",
     example: "[1, 2, 3].some(x => x > 2); // true",
     usage: "Checking if any item in a cart is out of stock.",
+    isHOF: true,
     richExample: `
 // Form Validation
 const hasErrors = fields.some(field => field.error);
@@ -187,6 +194,7 @@ console.log(hasEven); // false
     description: "Tests whether all elements in the array pass the test.",
     example: "[1, 2, 3].every(x => x > 0); // true",
     usage: "Validating if all form fields are filled.",
+    isHOF: true,
     richExample: `
 // Check if all steps are completed
 const steps = [
@@ -211,6 +219,7 @@ console.log(allGreaterThan5); // true
     description: "Sorts the elements of an array in place and returns the reference to the same array.",
     example: "[3, 1, 2].sort((a, b) => a - b); // [1, 2, 3]",
     usage: "Sorting a table of data.",
+    isHOF: true,
     richExample: `
 // Sorting users by name
 const users = [
@@ -348,6 +357,7 @@ console.log(flattened); // [1, 2, 3, [4]]
     description: "Maps each element using a mapping function, then flattens the result.",
     example: "[1, 2].flatMap(x => [x, x * 2]); // [1, 2, 2, 4]",
     usage: "Processing and flattening data in one step.",
+    isHOF: true,
     richExample: `
 // Extracting all tags from posts
 const posts = [
@@ -631,6 +641,7 @@ console.log(arr); // [1, 2, 3, 1, 2]
     description: "Applies a function against an accumulator and each value of the array (from right-to-left).",
     example: "[[0, 1], [2, 3]].reduceRight((acc, curr) => acc.concat(curr)); // [2, 3, 0, 1]",
     usage: "Processing data in reverse order.",
+    isHOF: true,
     richExample: `
 // Composing functions (Right to Left)
 const add5 = x => x + 5;

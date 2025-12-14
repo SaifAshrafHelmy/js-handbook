@@ -17,7 +17,7 @@ const routes = [
     },
     {
         href: "/hof",
-        label: "Higher Order Functions",
+        label: "Array Methods",
         icon: Code,
     },
     {

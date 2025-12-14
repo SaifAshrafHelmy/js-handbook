@@ -477,7 +477,7 @@ const [first, ...rest] = arr; // Rest
 \`\`\`
 
 ### HOFs (Map, Filter, Reduce)
-See the "33 HOFs" section for details.
+See the "JavaScript Array Methods" section for details.
 
 ### Mutation vs Immutability
 Always prefer immutable operations in modern JS/React.

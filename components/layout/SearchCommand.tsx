@@ -76,7 +76,7 @@ export function SearchCommand() {
                                     </Command.Item>
                                 ))}
                             </Command.Group>
-                            <Command.Group heading="Higher Order Functions">
+                            <Command.Group heading="Array Methods">
                                 {hofs.map((hof) => (
                                     <Command.Item
                                         key={hof.id}

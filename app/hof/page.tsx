@@ -6,28 +6,56 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
 import { hofs } from "@/data/hofs";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function HOFPage() {
+    const [showHOFOnly, setShowHOFOnly] = useState(false);
+
+    const filteredHofs = showHOFOnly ? hofs.filter(h => h.isHOF) : hofs;
+
     return (
         <div className="container py-12 lg:py-16 max-w-screen-2xl px-4 md:px-8">
             <div className="mb-12 text-center max-w-3xl mx-auto">
                 <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                    33 JS Higher Order Functions
+                    JavaScript Array Methods
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed">
-                    Master these functions to write cleaner, more functional, and efficient JavaScript code.
+                <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+                    Master these methods to write cleaner, more functional, and efficient JavaScript code.
                 </p>
+
+                <div className="flex justify-center">
+                    <div className="flex items-center space-x-2 bg-secondary/50 p-2 rounded-full border border-border/50">
+                        <Button
+                            variant={!showHOFOnly ? "secondary" : "ghost"}
+                            size="sm"
+                            onClick={() => setShowHOFOnly(false)}
+                            className="rounded-full px-6"
+                        >
+                            All Methods
+                        </Button>
+                        <Button
+                            variant={showHOFOnly ? "secondary" : "ghost"}
+                            size="sm"
+                            onClick={() => setShowHOFOnly(true)}
+                            className="rounded-full px-6"
+                        >
+                            Higher Order Functions only
+                        </Button>
+                    </div>
+                </div>
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-                {hofs.map((hof) => (
+                {filteredHofs.map((hof) => (
                     <Card key={hof.id} className="flex flex-col overflow-hidden border-border/50 hover:border-primary/30 transition-colors bg-card/50 backdrop-blur-sm">
                         <CardHeader className="pb-4">
                             <div className="flex items-center justify-between mb-2">
                                 <CardTitle className="font-mono text-xl text-primary">
                                     .{hof.name}()
                                 </CardTitle>
-                                <Badge variant="secondary" className="bg-secondary/50">Array</Badge>
+                                {hof.isHOF && (
+                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">HOF</Badge>
+                                )}
                             </div>
                             <CardDescription className="text-base leading-snug">
                                 {hof.description}

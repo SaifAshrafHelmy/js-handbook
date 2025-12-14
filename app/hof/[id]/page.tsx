@@ -102,7 +102,7 @@ export default function HOFDetailPage() {
                     href="/hof"
                     className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
                 >
-                    <ArrowLeft className="mr-1 h-4 w-4" /> Back to HOFs
+                    <ArrowLeft className="mr-1 h-4 w-4" /> Back to Methods
                 </Link>
                 <div className="flex items-center gap-4 mb-4">
                     <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl text-primary bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">

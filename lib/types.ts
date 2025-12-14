@@ -17,6 +17,7 @@ export interface HOF {
   usage: string; // Real-world usage explanation
   richExample?: string; // Detailed code block
   category?: string;
+  isHOF?: boolean;
   practice?: {
     question: string;
     answer: string;
