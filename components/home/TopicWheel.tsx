@@ -46,37 +46,36 @@ export function TopicWheel({ topics }: TopicWheelProps) {
 
     return (
         <div className="flex flex-col lg:flex-row gap-8 items-start justify-center w-full">
-            {/* Topic List - Desktop Only */}
-            <div className="hidden lg:block w-full lg:w-1/2 space-y-2">
+            {/* Topic List - Always visible */}
+            <div className="w-full lg:w-1/2 space-y-2">
                 {filteredTopics.map((topic, index) => (
                     <motion.div
                         key={topic.id}
                         className={cn(
-                            "group relative rounded-xl transition-all duration-300",
+                            "group relative rounded-xl transition-all duration-300 cursor-pointer",
                             activeIndex === index
-                                ? "bg-primary/10 border-primary/20"
-                                : "border-transparent"
+                                ? "bg-primary/10 border-2 border-primary/30"
+                                : "border-2 border-transparent hover:border-border"
                         )}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{
                             opacity: 1,
                             x: 0,
                             scale: activeIndex === index ? 1.02 : 1,
-                            paddingLeft: activeIndex === index ? "1.5rem" : "1rem"
                         }}
                         transition={{
                             delay: index * 0.05,
                             scale: { type: "spring", stiffness: 300, damping: 20 }
                         }}
+                        onClick={() => setActiveIndex(index)}
                     >
-                        <Link
-                            href={`/topics/${topic.slug}`}
+                        <div
                             onMouseEnter={() => setActiveIndex(index)}
-                            className="flex items-center p-4 w-fit"
+                            className="flex items-center p-4"
                         >
                             <div
                                 className={cn(
-                                    "flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold mr-4 transition-colors flex-shrink-0",
+                                    "flex items-center justify-center w-10 h-10 rounded-xl text-sm font-bold mr-4 transition-colors flex-shrink-0",
                                     activeIndex === index
                                         ? "bg-primary text-primary-foreground"
                                         : "bg-muted text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary"
@@ -84,19 +83,24 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                             >
                                 {index + 1}
                             </div>
-                            <span
-                                className={cn(
-                                    "text-lg font-medium transition-colors",
-                                    activeIndex === index ? "text-primary font-bold text-xl" : "text-foreground/80"
-                                )}
-                            >
-                                {topic.title}
-                            </span>
-                        </Link>
+                            <div className="flex-1 min-w-0">
+                                <span
+                                    className={cn(
+                                        "text-base font-semibold transition-colors block truncate",
+                                        activeIndex === index ? "text-primary" : "text-foreground"
+                                    )}
+                                >
+                                    {topic.title}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                    {topic.category}
+                                </span>
+                            </div>
+                        </div>
                         {activeIndex === index && (
                             <motion.div
                                 layoutId="active-glow"
-                                className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/10 to-transparent -z-10"
+                                className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/5 to-transparent -z-10"
                                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                             />
                         )}
