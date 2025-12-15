@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Code, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, Code, Sparkles, ChevronLeft, ChevronRight, Clock, BookOpen, Zap } from "lucide-react";
+import { useSwipeable } from "react-swipeable";
 import { cn } from "@/lib/utils";
 import { Topic } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -12,17 +13,38 @@ interface TopicWheelProps {
     topics: Topic[];
 }
 
+// Get time-based greeting
+function getGreeting() {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+}
+
+// Get estimated reading time
+function getReadingTime(topic: Topic): string {
+    const wordCount = topic.content?.split(' ').length || 500;
+    const minutes = Math.ceil(wordCount / 200); // Average reading speed
+    return `${minutes} min read`;
+}
+
 export function TopicWheel({ topics }: TopicWheelProps) {
     const filteredTopics = topics.filter(t => t.slug !== 'interview-prep');
     const [activeIndex, setActiveIndex] = useState(0);
+    const [greeting, setGreeting] = useState("");
 
     const activeTopic = filteredTopics[activeIndex];
 
-    // Auto-cycle on mobile
+    // Set greeting on mount
+    useEffect(() => {
+        setGreeting(getGreeting());
+    }, []);
+
+    // Auto-cycle
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveIndex((prev) => (prev + 1) % filteredTopics.length);
-        }, 5000); // Change topic every 5 seconds
+        }, 6000); // Increased to 6 seconds for better UX
 
         return () => clearInterval(interval);
     }, [filteredTopics.length]);
@@ -34,6 +56,14 @@ export function TopicWheel({ topics }: TopicWheelProps) {
     const goToNext = () => {
         setActiveIndex((prev) => (prev + 1) % filteredTopics.length);
     };
+
+    // Swipe handlers
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: () => goToNext(),
+        onSwipedRight: () => goToPrevious(),
+        trackMouse: false,
+        trackTouch: true,
+    });
 
     return (
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start justify-center min-h-[400px] md:min-h-[600px] w-full">
@@ -98,13 +128,52 @@ export function TopicWheel({ topics }: TopicWheelProps) {
 
             {/* Preview Card with Mobile Navigation */}
             <div className="w-full lg:w-1/2 lg:sticky lg:top-24">
+                {/* Mobile: Greeting and Stats */}
+                <motion.div
+                    className="lg:hidden mb-6 space-y-3"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-primary via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {greeting}, Developer! ✨
+                    </h2>
+
+                    {/* Stats Cards */}
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-xl p-3 backdrop-blur-sm">
+                            <div className="flex items-center gap-1.5 mb-1">
+                                <BookOpen className="w-3.5 h-3.5 text-primary" />
+                                <span className="text-xs text-muted-foreground">Topics</span>
+                            </div>
+                            <p className="text-xl font-bold text-primary">{filteredTopics.length}</p>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 rounded-xl p-3 backdrop-blur-sm">
+                            <div className="flex items-center gap-1.5 mb-1">
+                                <Zap className="w-3.5 h-3.5 text-emerald-500" />
+                                <span className="text-xs text-muted-foreground">Methods</span>
+                            </div>
+                            <p className="text-xl font-bold text-emerald-500">33</p>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-xl p-3 backdrop-blur-sm">
+                            <div className="flex items-center gap-1.5 mb-1">
+                                <Clock className="w-3.5 h-3.5 text-cyan-500" />
+                                <span className="text-xs text-muted-foreground">Active</span>
+                            </div>
+                            <p className="text-xl font-bold text-cyan-500">{activeIndex + 1}/{filteredTopics.length}</p>
+                        </div>
+                    </div>
+                </motion.div>
+
                 {/* Mobile Cycling Indicator */}
-                <div className="flex lg:hidden justify-center items-center gap-2 mb-4">
+                <div className="flex lg:hidden justify-center items-center gap-3 mb-4">
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={goToPrevious}
-                        className="h-8 w-8 rounded-full"
+                        className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                     >
                         <ChevronLeft className="h-5 w-5" />
                     </Button>
@@ -115,11 +184,12 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                                 key={index}
                                 onClick={() => setActiveIndex(index)}
                                 className={cn(
-                                    "h-1.5 rounded-full transition-all",
+                                    "h-1.5 rounded-full transition-all duration-300",
                                     activeIndex === index
-                                        ? "w-8 bg-primary"
-                                        : "w-1.5 bg-muted-foreground/30"
+                                        ? "w-8 bg-primary shadow-lg shadow-primary/50"
+                                        : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50"
                                 )}
+                                aria-label={`Go to topic ${index + 1}`}
                             />
                         ))}
                     </div>
@@ -128,69 +198,130 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                         variant="ghost"
                         size="icon"
                         onClick={goToNext}
-                        className="h-8 w-8 rounded-full"
+                        className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                     >
                         <ChevronRight className="h-5 w-5" />
                     </Button>
                 </div>
 
-                <AnimatePresence mode="wait">
-                    {activeTopic && (
-                        <motion.div
-                            key={activeTopic.id}
-                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                            transition={{ duration: 0.3 }}
-                            className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-border/50 bg-gradient-to-br from-card to-muted/20 p-5 md:p-8 shadow-2xl h-full group hover:border-primary/50 transition-colors"
-                        >
-                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
-                                <Code className="w-48 h-48" />
-                            </div>
-
-                            <div className="relative z-10">
-                                <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary mb-4 md:mb-6">
-                                    <Sparkles className="mr-1 h-3 w-3" />
-                                    {activeTopic.category}
+                {/* Swipeable Card Container */}
+                <div {...swipeHandlers} className="touch-pan-y">
+                    <AnimatePresence mode="wait">
+                        {activeTopic && (
+                            <motion.div
+                                key={activeTopic.id}
+                                initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                                animate={{ opacity: 1, x: 0, scale: 1 }}
+                                exit={{ opacity: 0, x: -50, scale: 0.95 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 30
+                                }}
+                                className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-muted/20 p-6 md:p-8 shadow-2xl group hover:border-primary/50 hover:shadow-primary/10 transition-all duration-300"
+                                style={{
+                                    backgroundImage: "radial-gradient(circle at top right, rgba(139, 92, 246, 0.05), transparent 50%)"
+                                }}
+                            >
+                                {/* Decorative Background */}
+                                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none">
+                                    <Code className="w-48 h-48 text-primary" />
                                 </div>
 
-                                {/* Mobile: Show topic number and title */}
-                                <div className="flex lg:hidden items-center gap-3 mb-3">
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex-shrink-0">
-                                        {activeIndex + 1}
+                                {/* Glassmorphism overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+
+                                <div className="relative z-10">
+                                    {/* Category Badge */}
+                                    <motion.div
+                                        className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-primary mb-4 md:mb-6 shadow-lg shadow-primary/10"
+                                        whileHover={{ scale: 1.05 }}
+                                        transition={{ type: "spring", stiffness: 400 }}
+                                    >
+                                        <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                                        {activeTopic.category}
+                                    </motion.div>
+
+                                    {/* Mobile: Show topic number and title */}
+                                    <div className="flex lg:hidden items-center gap-3 mb-4">
+                                        <motion.div
+                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold flex-shrink-0 shadow-lg shadow-primary/30"
+                                            whileHover={{ scale: 1.1, rotate: 5 }}
+                                            transition={{ type: "spring", stiffness: 400 }}
+                                        >
+                                            {activeIndex + 1}
+                                        </motion.div>
+                                        <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                                            {activeTopic.title}
+                                        </h2>
                                     </div>
-                                    <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">{activeTopic.title}</h2>
-                                </div>
 
-                                {/* Desktop: Just show title */}
-                                <h2 className="hidden lg:block text-2xl md:text-3xl font-bold mb-3 md:mb-4 group-hover:text-primary transition-colors">{activeTopic.title}</h2>
+                                    {/* Desktop: Just show title */}
+                                    <h2 className="hidden lg:block text-2xl md:text-3xl font-bold mb-4 md:mb-5 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                                        {activeTopic.title}
+                                    </h2>
 
-                                <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 leading-relaxed">
-                                    {activeTopic.description}
-                                </p>
-
-                                {activeTopic.keyConcepts && (
-                                    <div className="mb-6 md:mb-8">
-                                        <h4 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">Key Concepts</h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {activeTopic.keyConcepts.map((concept) => (
-                                                <span key={concept} className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10">
-                                                    {concept}
-                                                </span>
-                                            ))}
+                                    {/* Reading Time Badge */}
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/50 border border-border/50 text-xs text-muted-foreground">
+                                            <Clock className="w-3 h-3" />
+                                            {getReadingTime(activeTopic)}
                                         </div>
                                     </div>
-                                )}
 
-                                <Link href={`/topics/${activeTopic.slug}`} className="inline-block">
-                                    <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 group-hover:translate-x-2 transition-transform">
-                                        Start Learning <ArrowRight className="ml-2 h-4 w-4" />
-                                    </div>
-                                </Link>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                                    <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 leading-relaxed">
+                                        {activeTopic.description}
+                                    </p>
+
+                                    {activeTopic.keyConcepts && (
+                                        <div className="mb-6 md:mb-8">
+                                            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+                                                <Sparkles className="w-3 h-3" />
+                                                Key Concepts
+                                            </h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {activeTopic.keyConcepts.map((concept, idx) => (
+                                                    <motion.span
+                                                        key={concept}
+                                                        className="inline-flex items-center rounded-lg bg-gradient-to-br from-muted to-muted/50 px-3 py-1.5 text-xs font-medium border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-all cursor-default"
+                                                        initial={{ opacity: 0, scale: 0.8 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        transition={{ delay: idx * 0.05 }}
+                                                        whileHover={{ scale: 1.05, y: -2 }}
+                                                    >
+                                                        {concept}
+                                                    </motion.span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <Link href={`/topics/${activeTopic.slug}`} className="inline-block">
+                                        <motion.div
+                                            className="inline-flex items-center justify-center rounded-xl text-sm font-semibold bg-gradient-to-r from-primary to-primary/90 text-primary-foreground hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/30 h-11 px-6 py-2 transition-all"
+                                            whileHover={{ scale: 1.05, x: 5 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            transition={{ type: "spring", stiffness: 400 }}
+                                        >
+                                            Start Learning
+                                            <ArrowRight className="ml-2 h-4 w-4" />
+                                        </motion.div>
+                                    </Link>
+
+                                    {/* Swipe Hint (only on mobile) */}
+                                    <motion.p
+                                        className="lg:hidden text-xs text-muted-foreground/60 text-center mt-6"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 1 }}
+                                    >
+                                        👆 Swipe to explore more topics
+                                    </motion.p>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
         </div>
     );
