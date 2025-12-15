@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from "lucide-react";
 import { useSwipeable } from "react-swipeable";
 import { cn } from "@/lib/utils";
 import { Topic } from "@/lib/types";
@@ -16,6 +16,7 @@ interface TopicWheelProps {
 export function TopicWheel({ topics }: TopicWheelProps) {
     const filteredTopics = topics.filter(t => t.slug !== 'interview-prep');
     const [activeIndex, setActiveIndex] = useState(0);
+    const [showAllTopics, setShowAllTopics] = useState(false);
 
     const activeTopic = filteredTopics[activeIndex];
 
@@ -46,8 +47,8 @@ export function TopicWheel({ topics }: TopicWheelProps) {
 
     return (
         <div className="flex flex-col lg:flex-row gap-8 items-start justify-center w-full">
-            {/* Topic List - Always visible */}
-            <div className="w-full lg:w-1/2 space-y-2">
+            {/* Topic List - Desktop Only */}
+            <div className="hidden lg:block w-full lg:w-1/2 space-y-2">
                 {filteredTopics.map((topic, index) => (
                     <motion.div
                         key={topic.id}
@@ -108,7 +109,7 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                 ))}
             </div>
 
-            {/* Preview Card */}
+            {/* Mobile & Desktop Preview */}
             <div className="w-full lg:w-1/2 lg:sticky lg:top-24">
                 {/* Mobile Navigation Dots */}
                 <div className="flex lg:hidden justify-center items-center gap-3 mb-6">
@@ -209,6 +210,79 @@ export function TopicWheel({ topics }: TopicWheelProps) {
                                             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                                         </Button>
                                     </Link>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Mobile: Collapsible Topic List */}
+                <div className="lg:hidden mt-6">
+                    <Button
+                        variant="outline"
+                        onClick={() => setShowAllTopics(!showAllTopics)}
+                        className="w-full h-12 rounded-xl flex items-center justify-between"
+                    >
+                        <span className="font-semibold">
+                            {showAllTopics ? "Hide" : "View All"} Topics ({filteredTopics.length})
+                        </span>
+                        {showAllTopics ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                    </Button>
+
+                    <AnimatePresence>
+                        {showAllTopics && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="space-y-2 mt-4">
+                                    {filteredTopics.map((topic, index) => (
+                                        <motion.div
+                                            key={topic.id}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: index * 0.03 }}
+                                            className={cn(
+                                                "rounded-xl transition-all duration-300 cursor-pointer",
+                                                activeIndex === index
+                                                    ? "bg-primary/10 border-2 border-primary/30"
+                                                    : "border-2 border-transparent hover:border-border bg-muted/30"
+                                            )}
+                                            onClick={() => {
+                                                setActiveIndex(index);
+                                                setShowAllTopics(false);
+                                            }}
+                                        >
+                                            <div className="flex items-center p-4">
+                                                <div
+                                                    className={cn(
+                                                        "flex items-center justify-center w-10 h-10 rounded-xl text-sm font-bold mr-4 transition-colors flex-shrink-0",
+                                                        activeIndex === index
+                                                            ? "bg-primary text-primary-foreground"
+                                                            : "bg-muted text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {index + 1}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <span
+                                                        className={cn(
+                                                            "text-base font-semibold transition-colors block truncate",
+                                                            activeIndex === index ? "text-primary" : "text-foreground"
+                                                        )}
+                                                    >
+                                                        {topic.title}
+                                                    </span>
+                                                    <span className="text-xs text-muted-foreground">
+                                                        {topic.category}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
                                 </div>
                             </motion.div>
                         )}
